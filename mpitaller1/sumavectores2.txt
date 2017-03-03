@@ -12,8 +12,8 @@
 //size: Tamaño de la lista de procesos
 //MPI_COMM_WORLD: Tiene todos los procesos que se estan usando para el task
 
-int main() {
-  int taskid, numtask, numworkers, source, mtype, rc;
+int main(int argc, char** argv) {
+  int world_rank, world_size, numworkers, source, mtype, rc;
   int i, aversize, elements, extra, offset, dest;
   double *a; // vector A 
   double *b; // vector B 
@@ -21,23 +21,28 @@ int main() {
   MPI_Status mpi_status;
 
   MPI_Init(NULL, NULL);
-  MPI_Comm_rank(MPI_COMM_WORLD, &taskid); 
-  MPI_Comm_size(MPI_COMM_WORLD, &numtask);
 
-  if (numtask < 2) {
+
+int world_size;
+  MPI_Comm_size(MPI_COMM_WORLD, &world_size);
+
+int world_rank;
+  MPI_Comm_rank(MPI_COMM_WORLD, &world_rank); 
+
+  if (world_size < 2) {
     printf("Need at least two MPI tasks. Quitting...\n");
     MPI_Abort(MPI_COMM_WORLD, rc);
     exit(1);
   }
 
-  numworkers = numtask - 1;
+  numworkers = world_size - 1;
 a = (double*)malloc(SIZE*sizeof(double));
 b = (double*)malloc(SIZE*sizeof(double));
 c = (double*)malloc(SIZE*sizeof(double));
 
   //------------------------ master task --------------------------------------
-  if (taskid == MASTER) {
-    printf("mpi_sumavectores has started with %d tasks.\n", numtask);
+  if (world_rank == MASTER) {
+    printf("mpi_sumavectores has started with %d tasks.\n", world_size);
     printf("Vectores iniciales:\n");
     for (i = 0; i < SIZE; i++) {
       a[i] = rand() % SIZE;
@@ -86,7 +91,7 @@ c = (double*)malloc(SIZE*sizeof(double));
   }
 
   //------------------------ worker task --------------------------------------
-  if (taskid > MASTER) {
+  if (world_rank > MASTER) {
     mtype = FROM_MASTER;
     MPI_Recv(&offset, 1, MPI_INT, MASTER, mtype, MPI_COMM_WORLD, &mpi_status);
     MPI_Recv(&elements, 1, MPI_INT, MASTER, mtype, MPI_COMM_WORLD, &mpi_status);
