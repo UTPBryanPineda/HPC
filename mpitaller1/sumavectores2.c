@@ -1,15 +1,16 @@
 #include <mpi.h>
 #include <stdio.h>
+
 #include <stdlib.h>
 
-#define SIZE 1000000       // TamaÃ±o de los vectores
+#define SIZE 1000000       // Tamaño de los vectores
 #define MASTER 0      // id del primer task
 #define FROM_MASTER 1 // enviando tipo de mensaje
 #define FROM_WORKER 2 // enviando tipo de mensaje
 
 //Definiciones
 //Rank: Identificador de los procesos
-//size: TamaÃ±o de la lista de procesos
+//size: Tamaño de la lista de procesos
 //MPI_COMM_WORLD: Tiene todos los procesos que se estan usando para el task
 
 int main(int argc, char** argv) {
