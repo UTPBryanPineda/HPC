@@ -1,7 +1,3 @@
-//Matrix multiplication using Ints
-//Anderson Alberto Ochoa Estupiñan
-//Code: 1053823121
-
 #include<stdio.h>
 #include<iostream>
 #include<cstdlib>
@@ -11,8 +7,7 @@
 #define TILE_WIDTH 32
 using namespace std;
 
-//=====================================================================================
-//Function to print matrices
+
 void print(int *A, int n, int m)
 {
     for (int i=0; i<n; i++)
@@ -25,7 +20,6 @@ void print(int *A, int n, int m)
     }
 }
 
-//=====================================================================================
 //Function used just to fill the given matrix with a given value
 void fillMatrix (int *mat, int value, int n, int m)
 {
@@ -59,9 +53,7 @@ void multMatrixsequential (int *h_matA, int *h_matB, int *h_matC, int n, int m, 
   }
 }
 
-//=====================================================================================
-//Parallel
-//The multiplication kernel without tiles
+
 __global__ void matrixMultKernel (int *d_matA, int *d_matB, int *d_matC, int n, int m, int o)
 {
   int Row = blockIdx.y*blockDim.y+threadIdx.y;
@@ -79,7 +71,6 @@ __global__ void matrixMultKernel (int *d_matA, int *d_matB, int *d_matC, int n, 
   }
 }
 
-//=====================================================================================
 //the multiplication kernel with tiles
 __global__ void matrixMulKernelTiled(int *d_matA, int *d_matB, int *d_matC, int n, int m, int o){
     __shared__ int Mds[TILE_WIDTH][TILE_WIDTH];
@@ -129,7 +120,6 @@ __global__ void matrixMulKernelTiled(int *d_matA, int *d_matB, int *d_matC, int 
 }
 
 
-//=====================================================================================
 //Function to call the kernel of the tiled multiplication
 void multMatrixParallelTiled(int *A, int *B, int *C, int n, int m, int o)
 {
@@ -147,7 +137,7 @@ void multMatrixParallelTiled(int *A, int *B, int *C, int n, int m, int o)
   cudaMemcpy(d_matB, B, m * o * sizeof(int), cudaMemcpyHostToDevice);
   dim3 threads(blockSize,blockSize,1); //How many blocks U want in each direction -- U have to respect the GPU's capacity
   dim3 blocks(ceil(o/blockSize),ceil(n/blockSize),1);//How many threads U want to have per block --
-  //The GPU used in this course is capable of have 1024 threads per block
+
   //3. Kernel Launch Code
   matrixMultKernel<<<blocks,threads>>>(d_matA,d_matB,d_matC,n,m,o);
   cudaMemcpy (C, d_matC, n * o * sizeof(int), cudaMemcpyDeviceToHost);
@@ -158,7 +148,6 @@ void multMatrixParallelTiled(int *A, int *B, int *C, int n, int m, int o)
 
 }
 
-//=====================================================================================
 //Function to call the tile less multiplication kernel
 void multMatrixParallel(int *A, int *B, int *C, int n, int m, int o)
 {
@@ -176,7 +165,6 @@ void multMatrixParallel(int *A, int *B, int *C, int n, int m, int o)
     cudaMemcpy(d_matB, B, m * o * sizeof(int), cudaMemcpyHostToDevice);
     dim3 threads(blockSize,blockSize,1); //How many blocks U want in each direction -- U have to respect the GPU's capacity
     dim3 blocks(ceil(o/blockSize),ceil(n/blockSize),1);//How many threads U want to have per block --
-    //The GPU used in this course is capable of have 1024 threads per block
     //3. Kernel Launch Code
     matrixMultKernel<<<blocks,threads>>>(d_matA,d_matB,d_matC,n,m,o);
     cudaMemcpy (C, d_matC, n * o * sizeof(int), cudaMemcpyDeviceToHost);
@@ -187,7 +175,6 @@ void multMatrixParallel(int *A, int *B, int *C, int n, int m, int o)
 }
 
 
-//=====================================================================================
 //Function used to compare the results
 int compareMatrix (int *A, int *B,int n, int m)
 {
@@ -256,12 +243,7 @@ int main()
     cout<< "Comparing Serial vs Parallel with Tiles result " <<endl;
     compareMatrix(matCS,matCPT,n,o);
 
-    //For debugging porpouses only
-    //print(matCS,n,o);
-    //cout<<endl;
-    //print(matCP,n,o);
-    //cout<<endl;
-    //print(matCPT,n,o);
+ 
 
     free (matA);
     free (matB);

@@ -1,0 +1,19 @@
+0
+[node01:09297] mca_base_component_repository_open: unable to open mca_state_staged_hnp: /usr/local/lib/openmpi/mca_state_staged_hnp.so: undefined symbol: orte_staged_execution (ignored)
+[node01:09297] mca_base_component_repository_open: unable to open mca_state_staged_orted: /usr/local/lib/openmpi/mca_state_staged_orted.so: undefined symbol: orte_staged_execution (ignored)
+[node01:09297] mca_base_component_repository_open: unable to open mca_oob_usock: /usr/local/lib/openmpi/mca_oob_usock.so: undefined symbol: opal_sec (ignored)
+[node01:09297] mca_base_component_repository_open: unable to open mca_iof_mr_orted: /usr/local/lib/openmpi/mca_iof_mr_orted.so: undefined symbol: orte_map_reduce (ignored)
+[node01:09297] mca_base_component_repository_open: unable to open mca_iof_mr_hnp: /usr/local/lib/openmpi/mca_iof_mr_hnp.so: undefined symbol: orte_map_reduce (ignored)
+--------------------------------------------------------------------------
+mpirun was unable to find the specified executable file, and therefore
+did not launch the job.  This error was first reported for process
+rank 0; it may have occurred for other processes as well.
+
+NOTE: A common cause for this error is misspelling a mpirun command
+      line parameter option (remember that mpirun interprets the first
+      unrecognized command line token as the executable).
+
+Node:       node01
+Executable: segundoparcial
+--------------------------------------------------------------------------
+2 total processes failed to start
